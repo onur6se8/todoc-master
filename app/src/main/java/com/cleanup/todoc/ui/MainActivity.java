@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,21 +17,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.injections.Injection;
 import com.cleanup.todoc.injections.ViewModelFactory;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.internal.Utils;
 
 /**
  * <p>Home activity of the application which is displayed when the user opens the app.</p>
@@ -65,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * The sort method to be used to display tasks
      */
     @NonNull
-    private SortMethod sortMethod = SortMethod.NONE;
+    private SortMethod sortMethod; // = SortMethod.NONE;
 
     /**
      * Dialog to create a new task
@@ -124,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             sortMethod = SortMethod.NONE;
         }
 
-        // 8 - Configure RecyclerView & ViewModel
         this.configureRecyclerView();
         this.configureViewModel();
         this.getTasks();
@@ -157,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             sortMethod = SortMethod.RECENT_FIRST;
         }
 
-        updateTasks(tasks);
+        // updateTasks(tasks);
+        getTasks();
         return super.onOptionsItemSelected(item);
     }
 
@@ -167,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     private void configureViewModel() {
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(this);
         this.taskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(TaskViewModel.class);
-        // this.taskViewModel.init(PROJECT_ID);   supr
+        this.taskViewModel.init(PROJECT_ID);
     }
 
 
@@ -203,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     @Override
     public void onDeleteTask(Task task) {
         this.deleteTask(task); //tasks.remove(task);
-        updateTasks(tasks);
+        // updateTasks(tasks);
     }
 
     /**
@@ -271,8 +264,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * @param task the task to be added to the list
      */
     private void addTask(@NonNull Task task) {
-        this.updateTask(task); // tasks.add(task);
-        updateTasks(tasks);
+        createTask(task);
     }
 
     /**

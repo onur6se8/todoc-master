@@ -55,7 +55,7 @@ public abstract class TodocDatabase extends RoomDatabase {
                     contentValues.put("name", project.getName());
                     contentValues.put("color", project.getColor());
 
-                    db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
+                    db.insert("projects", OnConflictStrategy.IGNORE, contentValues);
 
                 }
             }
